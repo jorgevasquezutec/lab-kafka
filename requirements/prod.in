@@ -1,0 +1,50 @@
+boltons
+editdistance
+flask
+h5py
+numpy
+# pytorch-lightning  # to use comment ray[serve]
+requests
+smart_open
+toml
+torch
+torchvision
+torchmetrics
+pymongo
+redis
+# dask
+scikit-learn
+pandas
+jupyterlab # to use comment dask-ml
+# dask-ml # to use comment jupyterlab
+zarr
+pyarrow
+# ray
+# ray[air]
+# ray[train]
+# ray[tune]
+# ray[rllib]
+# transformers
+# ray[serve] # to use comment pytorch-lightning
+
+matplotlib
+# panel
+confluent_kafka
+panel
+# statsmodels
+pluck
+# graphviz
+# neo4j
+# psycopg2
+# cassandra-driver
+# datashader
+# holoviews
+# scitools
+# cartopy
+# pyviz
+# cartopy==0.19.0.post1
+# geoviews
+# click==8.0.2
+# pyarrow
+snakebite
+mrjob
