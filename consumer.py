@@ -9,6 +9,7 @@ import redis
 from bson.json_util import dumps
 import numpy as np 
 from statsmodels.tsa.arima.model import ARIMA
+from matplotlib.animation import FuncAnimation
 
 # REDIS_HOST = '0.0.0.0'
 # REDIS_PORT = '6379'
@@ -32,7 +33,7 @@ class DataCapture():
     def __init__(self) -> None:
         self.conf = {
             'bootstrap.servers': 'localhost:29092',
-            'group.id': 'test12',     
+            'group.id': 'test14',     
             'enable.auto.commit': 'false',
             'auto.offset.reset': 'earliest',
             'max.poll.interval.ms': '500000',
@@ -41,6 +42,13 @@ class DataCapture():
         }
         self.redisClient = redis.StrictRedis(host='0.0.0.0', port=6379, db=0)
         self.redisClient.delete('data')
+
+    def animate(self,temperature,forecast):
+        plt.cla()
+        plt.plot([x for x in range(len(temperature)+1)],temperature+[forecast[0]] ,label='temperatures', color='red')
+        plt.plot([y for y in range(len(temperature),len(temperature)+len(forecast))],forecast ,label='forecast', color='blue')
+        plt.ylabel('Temperatures')
+        # plt.show()
 
     def consume(self, topic='test'):
         self.consumer = Consumer(self.conf)
@@ -63,19 +71,16 @@ class DataCapture():
                     offset = msg.offset()                                                         
                     if event is not None:
                         # process it
+                        print(event)
                         parseEvent = json.loads(event.decode('utf-8'))
                         if(start):
                             self.lastIndex=self.redisClient.xadd('data', parseEvent)
                             start = False
                         else:
                             self.redisClient.xadd('data', parseEvent)
-                        # events.append(parseEvent)
                         
                     self.consumer.commit(offsets=[TopicPartition(topic = self.topic, partition=partition, offset=offset+1)], asynchronous = False)
                 
-                #print(events)
-                # temperatures = pluck(events,'Temperature')
-                # print(temperatures)
                 data = self.redisClient.xrange('data',min=self.lastIndex,max='+')
                 temperatures =[float(x[1].get(b'Temperature')) for x in  data]
                 vstd = np.std(temperatures)
@@ -88,20 +93,14 @@ class DataCapture():
                 model = ARIMA(temperatures, order=(5, 1, 0)) 
                 model_fit = model.fit()
                 forecast= model_fit.forecast(10, alpha=0.05)
-                # print("temperatures: ",temperatures)
-                # print("forecast:",forecast)
-                # irradiances = events.pluck("GHI")
-                # times = events.pluck("Date")
                 plt.plot([x for x in range(len(temperatures)+1)],temperatures+[forecast[0]] ,label='temperatures', color='red')
                 plt.plot([y for y in range(len(temperatures),len(temperatures)+len(forecast))],forecast ,label='forecast', color='blue')
-                # plt.plot(next_data, color='blue',label='Forecast')
-                # # plt.plot(irradiances, color='blue')
                 plt.ylabel('Temperatures')
-                # 
-                plt.show()
-                time.sleep(5)
-
-
+                plt.show(block=False)
+                dateTime = time.strftime("%Y%m%d%H%M%S",time.localtime())
+                plt.savefig('./results/plot'+dateTime+'.png',)
+                plt.pause(5)
+                plt.close()
 
                 print("==============================")
 

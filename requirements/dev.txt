@@ -40,6 +40,8 @@ dill==0.3.5.1
     # via pylint
 dparse==0.6.2
     # via safety
+drawnow==0.72.5
+    # via -r requirements/dev.in
 editdistance==0.6.0
     # via
     #   -c requirements/prod.txt
@@ -76,6 +78,7 @@ matplotlib==3.6.1
     # via
     #   -c requirements/prod.txt
     #   -r requirements/dev.in
+    #   drawnow
     #   itermplot
 mccabe==0.7.0
     # via pylint

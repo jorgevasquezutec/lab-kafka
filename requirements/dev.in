@@ -15,4 +15,5 @@ safety
 scipy
 pillow
 statsmodels
+drawnow
 # wandb
