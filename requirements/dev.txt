@@ -93,7 +93,10 @@ numpy==1.23.3
     #   contourpy
     #   itermplot
     #   matplotlib
+    #   pandas
+    #   patsy
     #   scipy
+    #   statsmodels
 packaging==21.3
     # via
     #   -c requirements/prod.txt
@@ -101,8 +104,15 @@ packaging==21.3
     #   matplotlib
     #   pytest
     #   safety
+    #   statsmodels
+pandas==1.5.0
+    # via
+    #   -c requirements/prod.txt
+    #   statsmodels
 pathspec==0.10.1
     # via black
+patsy==0.5.3
+    # via statsmodels
 pbr==5.10.0
     # via stevedore
 pillow==9.2.0
@@ -135,6 +145,11 @@ python-dateutil==2.8.2
     # via
     #   -c requirements/prod.txt
     #   matplotlib
+    #   pandas
+pytz==2022.2.1
+    # via
+    #   -c requirements/prod.txt
+    #   pandas
 pyyaml==6.0
     # via
     #   -c requirements/prod.txt
@@ -156,15 +171,19 @@ scipy==1.9.1
     # via
     #   -c requirements/prod.txt
     #   -r requirements/dev.in
+    #   statsmodels
 six==1.16.0
     # via
     #   -c requirements/prod.txt
     #   itermplot
+    #   patsy
     #   python-dateutil
 smmap==5.0.0
     # via gitdb
 snowballstemmer==2.2.0
     # via pydocstyle
+statsmodels==0.13.5
+    # via -r requirements/dev.in
 stevedore==4.0.0
     # via bandit
 toml==0.10.2

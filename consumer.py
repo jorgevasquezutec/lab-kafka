@@ -8,6 +8,7 @@ from pluck import pluck
 import redis
 from bson.json_util import dumps
 import numpy as np 
+from statsmodels.tsa.arima.model import ARIMA
 
 # REDIS_HOST = '0.0.0.0'
 # REDIS_PORT = '6379'
@@ -31,7 +32,7 @@ class DataCapture():
     def __init__(self) -> None:
         self.conf = {
             'bootstrap.servers': 'localhost:29092',
-            'group.id': 'test10',     
+            'group.id': 'test12',     
             'enable.auto.commit': 'false',
             'auto.offset.reset': 'earliest',
             'max.poll.interval.ms': '500000',
@@ -84,11 +85,18 @@ class DataCapture():
                 print("std: ",vstd)
                 print("media: ",vmedia)
                 print("varianza: ",vsdt)
+                model = ARIMA(temperatures, order=(5, 1, 0)) 
+                model_fit = model.fit()
+                forecast= model_fit.forecast(10, alpha=0.05)
+                # print("temperatures: ",temperatures)
+                # print("forecast:",forecast)
                 # irradiances = events.pluck("GHI")
                 # times = events.pluck("Date")
-                plt.plot(temperatures, color='red')
+                plt.plot([x for x in range(len(temperatures)+1)],temperatures+[forecast[0]] ,label='temperatures', color='red')
+                plt.plot([y for y in range(len(temperatures),len(temperatures)+len(forecast))],forecast ,label='forecast', color='blue')
+                # plt.plot(next_data, color='blue',label='Forecast')
                 # # plt.plot(irradiances, color='blue')
-                plt.ylabel('Temperature')
+                plt.ylabel('Temperatures')
                 # 
                 plt.show()
                 time.sleep(5)
