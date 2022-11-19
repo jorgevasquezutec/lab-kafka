@@ -33,7 +33,7 @@ class DataCapture():
     def __init__(self) -> None:
         self.conf = {
             'bootstrap.servers': 'localhost:29092',
-            'group.id': 'test14',     
+            'group.id': 'test17',     
             'enable.auto.commit': 'false',
             'auto.offset.reset': 'earliest',
             'max.poll.interval.ms': '500000',

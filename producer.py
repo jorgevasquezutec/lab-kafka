@@ -27,10 +27,13 @@ def produce_dataframe(df):
         value = {"Date": row[0], "GTI": row[2], "Temperature": row[8]}
         print(value)
         app.produce(json.dumps(value))
-        time.sleep(.25)
+        time.sleep(.01)
 
 def produce_dataframe_by_chunks(df):
+    cont=1
     for chunk_df in df:
+        print("chunk_df:",cont)
+        cont+=1
         produce_dataframe(chunk_df)
 
 
